@@ -5,7 +5,8 @@ import jwt
 from django.views import View
 from django.http import HttpResponse, JsonResponse
 from django.db import IntegrityError
-
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 from .models import Account
 from project_1st.settings import SECRET_KEY
 
@@ -13,17 +14,21 @@ class SignUpView(View):
 	def post(self, request):
 		data = json.loads(request.body)
 		try: 
-			if '@' not in data['email']:
-				return HttpResponse(status=400)
-			Account.objects.create(
-				email = data['email'],
-				password = bcrypt.hashpw(data['password'].encode('utf-8'), bcrypt.gensalt()).decode('utf-8'),
-				name = data['name'],
-				birthday = data['birthday'],
-				gender = data['gender'],
-				lunar = data['lunar'],
-			)
-			return HttpResponse(status=200)
+			validate_email(data['email'])
+			if len(data['password']) > 7 and len(data['password']) < 33:
+				Account.objects.create(
+					email = data['email'],
+					password = bcrypt.hashpw(data['password'].encode('utf-8'), bcrypt.gensalt()).decode('utf-8'),
+					name = data['name'],
+					birthday = data['birthday'],
+					gender = data['gender'],
+					lunar = data['lunar'],
+				)
+				return HttpResponse(status=200)
+			return HttpResponse(status=400)
+
+		except ValidationError:
+			return HttpResponse(status=400)
 
 		except IntegrityError:
 			return HttpResponse(status=400)

@@ -20,13 +20,13 @@ class QuestionType(models.Model):
     class Meta:
         db_table = 'question_types'
 
-class FAQ(models.Model):
+class FrequentQuestion(models.Model):
     question = models.CharField(max_length=100)
     answer = models.TextField()
     question_type = models.ForeignKey('QuestionType', on_delete=models.SET_NULL, null=True)
 
     class Meta:
-        db_table = 'faqs'
+        db_table = 'frequent_questions'
 
 class StoreDistrict(models.Model):
     name = models.CharField(max_length=50)
