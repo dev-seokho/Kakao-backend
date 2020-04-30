@@ -32,6 +32,13 @@ class Theme(models.Model):
 	class Meta:
 		db_table = 'themes'
 
+class Home(models.Model):
+	theme = models.ForeignKey('Theme', on_delete=models.SET_NULL, null=True)
+	product = models.ForeignKey('Product', on_delete=models.SET_NULL, null=True)
+
+	class Meta:
+		db_table = 'homes'
+
 class Character(models.Model):
 	image_url = models.URLField(max_length=2000)
 	name = models.CharField(max_length=20)

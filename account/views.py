@@ -22,7 +22,7 @@ class SignUpView(View):
 					name = data['name'],
 					birthday = data['birthday'],
 					gender = data['gender'],
-					lunar = data['lunar'],
+					lunar = data['lunar']
 				)
 				return HttpResponse(status=200)
 			return HttpResponse(status=400)
