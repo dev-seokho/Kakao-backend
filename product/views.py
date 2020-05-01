@@ -37,7 +37,6 @@ class ProductView(View):
 			for key in entire_product:
 				if sort_by == key:
 					return JsonResponse({'product':entire_product[sort_by]}, status=200)
-				return HttpResponse(status=400)
 			return HttpResponse(status=400)
 		
 		except ValueError:

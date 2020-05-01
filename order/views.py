@@ -10,7 +10,7 @@ from account.utils import login_required
 class BasketView(View):
 	@login_required
 	def get(self, request):
-		cart_data = Basket.objects.filter(account = Account.objects.get(id=request.user.id)).select_related('product')
+		cart_data = Basket.objects.filter(account = request.user.id).select_related('product')
 		basket = []
 		for cart in cart_data:
 			cart_list = {
@@ -20,20 +20,25 @@ class BasketView(View):
 				"price":cart.product.price
 			}
 			if cart.product.discount == 1:
-				cart_list["discount_percentage"]=cart.product.discount_percentage
-			
+				cart_list["discount_percentage"]=cart.product.discount_percentage  
 			basket.append(cart_list)
 		return JsonResponse({'basket':basket}, status=200)
 	
 	@login_required
 	def post(self, request):
 		data = json.loads(request.body)
+		cart_data = Basket.objects.filter(account = request.user.id)
 		try:
-			Basket.objects.create(
-				account_id = request.user.id,
-				product_id = data['product_id'],
-				quantity = data['quantity'],
-			)
+			if Basket.objects.filter(product=data['product_id']).exists():
+				cart_data = Basket.objects.get(account = request.user.id)
+				cart_data.quantity += 1
+				cart_data.save()
+			
+			else:
+				Basket.objects.create(
+					account_id = request.user.id,
+					product_id = data['product_id'],
+					quantity = data['quantity'])
 			return HttpResponse(status=200)
 		
 		except KeyError:
