@@ -9,33 +9,18 @@ from .models import Product, Theme, Home
 
 class HomeView(View):
 	def get(self, request):
-		theme_list = Theme.objects.prefetch_related('home_set').all()
-		data_list = []
-		for theme in theme_list:
-			data = {
-					"theme_id":theme.id,
-					"theme_image":theme.main_image_url,
-					"title":theme.name,
-					"description":theme.description
-			}
-
-			home_list = Home.objects.select_related('product').all()
-			product_list = []
-			for home in home_list:
-				if  home.product is not None:
-					if theme.id == home.theme.id:
-						product_list.append(
-							{
-								"image":home.product.image_url,
-								"name":home.product.name,
-								"price":home.product.price
-							}
-						)
-					data['product'] = product_list
-				else:
-					pass
-			data_list.append(data)
-		return JsonResponse({'theme':data_list}, status=200)
+		home_theme = [{
+			'theme_id':theme.id,
+			'theme_image':theme.main_image_url,
+			'title':theme.name,
+			'description':theme.description,
+			'product':[{
+				'image':product.product.image_url,
+				'name':product.product.name,
+				'price':product.product.price
+			}for product in Home.objects.select_related('theme', 'product').filter(theme__id = theme.id) if product.product]
+		}for theme in Theme.objects.prefetch_related('home_set').all()]
+		return JsonResponse({'theme':home_theme}, status=200)
 
 
 class ProductView(View):
@@ -44,20 +29,20 @@ class ProductView(View):
 		product_list = Product.objects.values('id', 'image_url', 'name', 'price','discount_percentage')
 		try:
 			if  sort_by == 'hot' :
-				return JsonResponse({'hot_product':list(product_list.order_by('-sales_quantity'))}, status=200)
+				return JsonResponse({'products':list(product_list.order_by('-sales_quantity'))}, status=200)
 			
 			elif sort_by == 'new':
-				return JsonResponse({'new_product':list(product_list.order_by('-created_at'))}, status=200)
+				return JsonResponse({'products':list(product_list.order_by('-created_at'))}, status=200)
 			
 			elif sort_by == 'high_price':
-				return JsonResponse({'high_price':list(product_list.order_by('-price'))}, status=200)
+				return JsonResponse({'products':list(product_list.order_by('-price'))}, status=200)
 			
 			elif sort_by == 'low_price': 
-				return JsonResponse({'low_price':list(product_list.order_by('price'))}, status=200)
-	
-			print("end of func")
+				return JsonResponse({'products':list(product_list.order_by('price'))}, status=200)
 	
 			return HttpResponse(status=400)
 		except ValueError:
 			return HttpResponse(status=401)
 
+
+		
