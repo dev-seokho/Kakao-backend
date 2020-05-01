@@ -50,5 +50,3 @@ class SignInView(View):
 
 		except KeyError:
 			return JsonResponse({'message' : 'INVALID_KEY'}, status=400)
-
-
