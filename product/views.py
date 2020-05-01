@@ -31,15 +31,13 @@ class SaleProductView(View):
         product_discount = Product.objects.filter(discount=True)
         product_discount_list = list(product_discount)
 
-        x=[]
-        y=[]
+        discount_list=[]
 
         for i,v in enumerate(product_discount.values('id','name','image_url','price','discount_percentage')):
-            if i==0 or i==1 or i ==2:
-                x.append(v)
-            y.append(v)
+            if i!=0 and i!=1 and i !=2:
+                discount_list.append(v)
 
-        return JsonResponse({'sale_item':y}, status=200)
+        return JsonResponse({'sale_item':discount_list}, status=200)
 
 class MainSalePrductView(View):
     def get(self, request):
@@ -47,13 +45,13 @@ class MainSalePrductView(View):
         product_discount = Product.objects.filter(discount=True)
         product_discount_list = list(product_discount)
 
-        x=[]
+        discount_list=[]
 
         for i,v in enumerate(product_discount.values('id','name','image_url','price','discount_percentage')):
             if i==0 or i==1 or i ==2:
-                x.append(v)
+                discount_list.append(v)
 
-        return JsonResponse({'sale_item':x}, status=200)
+        return JsonResponse({'sale_item':discount_list}, status=200)
 
 class ProductInformationView(View):
     def get(self, request, products_id):
