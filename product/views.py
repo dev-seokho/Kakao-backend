@@ -28,19 +28,18 @@ class ProductView(View):
 		sort_by = request.GET.get("sort_by", None)
 		product_list = Product.objects.values('id', 'image_url', 'name', 'price','discount_percentage')
 		try:
-			if  sort_by == 'hot' :
-				return JsonResponse({'products':list(product_list.order_by('-sales_quantity'))}, status=200)
-			
-			elif sort_by == 'new':
-				return JsonResponse({'products':list(product_list.order_by('-created_at'))}, status=200)
-			
-			elif sort_by == 'high_price':
-				return JsonResponse({'products':list(product_list.order_by('-price'))}, status=200)
-			
-			elif sort_by == 'low_price': 
-				return JsonResponse({'products':list(product_list.order_by('price'))}, status=200)
-	
+			entire_product ={
+				'hot':list(product_list.order_by('-sales_quantity')),
+				'new':list(product_list.order_by('-created_at')),
+				'high_price':list(product_list.order_by('-price')),
+				'low_price':list(product_list.order_by('price'))
+			}
+			for key in entire_product:
+				if sort_by == key:
+					return JsonResponse({'product':entire_product[sort_by]}, status=200)
+				return HttpResponse(status=400)
 			return HttpResponse(status=400)
+		
 		except ValueError:
 			return HttpResponse(status=401)
 
