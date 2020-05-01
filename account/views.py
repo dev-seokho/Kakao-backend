@@ -13,7 +13,7 @@ from project_1st.settings import SECRET_KEY
 class SignUpView(View):
 	def post(self, request):
 		data = json.loads(request.body)
-		try: 
+		try:
 			validate_email(data['email'])
 			if len(data['password']) > 7 and len(data['password']) < 33:
 				Account.objects.create(
@@ -50,5 +50,3 @@ class SignInView(View):
 
 		except KeyError:
 			return JsonResponse({'message' : 'INVALID_KEY'}, status=400)
-
-

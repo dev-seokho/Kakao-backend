@@ -25,7 +25,7 @@ SECRET_KEY = my_settings.SECRET['secret']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*","10.58.5.133","10.58.5.133:8000"]
 
 
 # Application definition
@@ -38,10 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders',
-	'account',
-	'order',
-	'product',
-	'information',
+    'account',
+    'order',
+    'product',
+    'information',
 ]
 
 MIDDLEWARE = [
