@@ -1,12 +1,12 @@
 import json
-from django.core import serializers
+from django.core    import serializers
 
-from django.views import View
-from django.http import HttpResponse, JsonResponse
+from django.views   import View
+from django.http    import HttpResponse, JsonResponse
 #from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-from .models import Product, Theme, Home
-from .models               import HotImage, NewImage, Product, Image, MainCategory, SubCategory, ProductCategory
+from .models        import Product, Theme, Home
+from .models        import HotImage, NewImage, Product, Image, MainCategory, SubCategory, ProductCategory
 
 class HomeView(View):
 	def get(self, request):
@@ -39,17 +39,16 @@ class ProductView(View):
 				if sort_by == key:
 					return JsonResponse({'product':entire_product[sort_by]}, status=200)
 			return HttpResponse(status=400)
-		
+
 		except ValueError:
 			return HttpResponse(status=401)
-
-
-		
 
 class HotImageView(View):
     def get(self, request):
 
-        popular_images = HotImage.objects.all().values()
+        offset = int(request.GET.get('offset','0'))
+        limit = int(request.GET.get('limit','15'))
+        popular_images = HotImage.objects.all().values()[offset:offset+limit]
 
         return JsonResponse({'all_popular_image':list(popular_images)}, status=200)
 
@@ -81,7 +80,7 @@ class SaleProductView(View):
 
         return JsonResponse({'sale_item':discount_list}, status=200)
 
-class MainSalePrductView(View):
+class MainSaleProductView(View):
     def get(self, request):
 
         product_discount = Product.objects.filter(discount=True)
@@ -119,8 +118,13 @@ class CategoryView(View):
 class SubCategoryView(View):
     def get(self, request, sub_id):
 
+        offset = int(request.GET.get('offset','0'))
+        limit = int(request.GET.get('limit','36'))
+
         all=ProductCategory.objects.select_related('product').filter(sub_category_id=sub_id)
         all_list = [{"id":a.product.id, "name":a.product.name, "price":a.product.price, "image_url":a.product.image_url}for a in all]
+
+        all_list = all_list[offset:limit+offset]
 
         return JsonResponse({'product':all_list}, status=200)
 
