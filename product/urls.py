@@ -24,6 +24,6 @@ urlpatterns = [
     path('/mainSaleProduct', MainSaleProductView.as_view()),
     path('/kind', CategoryView.as_view()),
     path('/<str:products_id>', ProductInformationView.as_view()),
-	path('/subCategory/<str:sub_id>', SubCategoryView.as_view()),
+    path('/subCategory/<str:sub_id>', SubCategoryView.as_view()),
 ]
 
