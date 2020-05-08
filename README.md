@@ -3,7 +3,8 @@ Kakao Friends Shop clone (https://www.kakaofriends.com)<br>
 Developed by a team of 5 developers (3 Front-End, 2 Back-End)<br>
 [Front-End Github Repository](https://github.com/wecode-bootcamp-korea/kakao-frontend)
 
-## Demo(Click the image)
+## Demo
+Click the image to watch video.
 [![Watch the video](https://images.velog.io/images/zoeyul/post/043588c7-2ad1-4dd3-a726-64aa5ff4a6a3/Screen%20Shot%202020-05-04%20at%208.51.31%20PM.png)](https://youtu.be/HObgKbCabHo)
 
 ## Technologies
@@ -17,11 +18,12 @@ Developed by a team of 5 developers (3 Front-End, 2 Back-End)<br>
 
 ## Features
 - Used Beautifulsoup and Selenium for web crawling
-- Sign-up / Sign-in features
-- Used Bcrypt for user password hashing
-- Used JWT for generating token
+- Used Bcrypt for user password hashing(Sign-Up / Sign-In)
+- Used JWT for generating token(Sign-In)
 - Email validation
-- Filtering(the last tab in main page)
+- Filtering
+- Pagination
+- Shopping basket
 - Deployed in AWS with MySQL RDS
 
 ## API Documentation
