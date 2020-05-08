@@ -1,15 +1,16 @@
 import json
-from django.core    import serializers
 
-from django.views   import View
-from django.http    import HttpResponse, JsonResponse
-#from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.views import View
+from django.http import HttpResponse, JsonResponse
 
-from .models        import Product, Theme, Home
-from .models        import HotImage, NewImage, Product, Image, MainCategory, SubCategory, ProductCategory
+from .models import Product, Theme, Home
+from .models import HotImage, NewImage, Product, Image, MainCategory, SubCategory, ProductCategory
+
 
 class HomeView(View):
 	def get(self, request):
+		limit = int(request.GET.get('limit',len(Theme.objects.all())))
+		offset = int(request.GET.get('offset',0))
 		home_theme = [{
 			'theme_id':theme.id,
 			'theme_image':theme.main_image_url,
@@ -20,13 +21,15 @@ class HomeView(View):
 				'name':product.product.name,
 				'price':product.product.price
 			}for product in Home.objects.select_related('theme', 'product').filter(theme__id = theme.id) if product.product]
-		}for theme in Theme.objects.prefetch_related('home_set').all()]
-		return JsonResponse({'theme':home_theme}, status=200)
+		}for theme in Theme.objects.all()]
+		return JsonResponse({'theme':home_theme[offset:limit]}, status=200)
 
 
 class ProductView(View):
 	def get(self, request):
 		sort_by = request.GET.get("sort_by", None)
+		limit = int(request.GET.get('limit',len(Product.objects.all())))
+		offset = int(request.GET.get('offset',0))
 		product_list = Product.objects.values('id', 'image_url', 'name', 'price','discount_percentage')
 		try:
 			entire_product ={
@@ -37,7 +40,7 @@ class ProductView(View):
 			}
 			for key in entire_product:
 				if sort_by == key:
-					return JsonResponse({'product':entire_product[sort_by]}, status=200)
+					return JsonResponse({'product':entire_product[sort_by][offset:limit]}, status=200)
 			return HttpResponse(status=400)
 
 		except ValueError:

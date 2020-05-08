@@ -2,6 +2,7 @@ import json
 
 from django.views import View
 from django.http import HttpResponse, JsonResponse
+from django.db.models import F
 
 from .models import Basket
 from account.models import Account
@@ -14,6 +15,7 @@ class BasketView(View):
 		basket = []
 		for cart in cart_data:
 			cart_list = {
+				"id":cart.product.id,
 				"image":cart.product.image_url,
 				"name":cart.product.name,
 				"quantity":cart.quantity,
@@ -27,11 +29,12 @@ class BasketView(View):
 	@login_required
 	def post(self, request):
 		data = json.loads(request.body)
+		print(request.body)
 		cart_data = Basket.objects.filter(account = request.user.id)
 		try:
 			if Basket.objects.filter(product=data['product_id']).exists():
-				cart_data = Basket.objects.get(account = request.user.id)
-				cart_data.quantity += 1
+				cart_data = Basket.objects.filter(product=data['product_id']).get(account = request.user.id)
+				cart_data.quantity = F('quantity') + 1
 				cart_data.save()
 			
 			else:
@@ -43,4 +46,5 @@ class BasketView(View):
 		
 		except KeyError:
 			return JsonResponse({'message':'INVALID_KEY'}, status=400)
+
 

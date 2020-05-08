@@ -25,7 +25,9 @@ SECRET_KEY = my_settings.SECRET['secret']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+
 ALLOWED_HOSTS = []
+
 
 # Application definition
 
@@ -145,3 +147,4 @@ CORS_ALLOW_HEADERS = (
     'x-csrftoken',
     'x-requested-with',
 )
+
