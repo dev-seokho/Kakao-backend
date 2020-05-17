@@ -5,7 +5,7 @@ Developed by a team of 5 developers (3 Front-End, 2 Back-End)<br>
 
 ## Demo
 Click the image to watch video.
-[![Watch the video](https://images.velog.io/images/zoeyul/post/043588c7-2ad1-4dd3-a726-64aa5ff4a6a3/Screen%20Shot%202020-05-04%20at%208.51.31%20PM.png)](https://youtu.be/HObgKbCabHo)
+[![Watch the video](https://images.velog.io/images/zoeyul/post/043588c7-2ad1-4dd3-a726-64aa5ff4a6a3/Screen%20Shot%202020-05-04%20at%208.51.31%20PM.png)](https://youtu.be/UfwMR_MeWLM)
 
 ## Technologies
 - Python
